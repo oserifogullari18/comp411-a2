@@ -78,7 +78,7 @@ class FullyConnectedNet(object):
         layer_input_dim = input_dim
 
         # Iterate over each hidden layer
-        for i, hd in enumerate(hidden_dims):
+        for i, hd in enumerate(hidden_dims):      
             # Initialize weights and biases for the current layer
             self.params['W' + str(i+1)] = weight_scale * np.random.randn(layer_input_dim, hd)
             self.params['b' + str(i+1)] = np.zeros(hd)
