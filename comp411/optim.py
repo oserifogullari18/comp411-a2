@@ -69,7 +69,14 @@ def sgd_momentum(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    mu = config['momentum']
+    learning_rate = config['learning_rate']
+
+    # Compute velocity update
+    v = mu * v - learning_rate * dw
+
+    # Compute parameter update
+    next_w = w + v
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -107,7 +114,16 @@ def rmsprop(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # Retrieve hyperparameters from config
+    learning_rate = config['learning_rate']
+    decay_rate = config['decay_rate']
+    epsilon = config['epsilon']
+
+    # Update cache with the decayed previous cache and the new gradient squared
+    config['cache'] = decay_rate * config['cache'] + (1 - decay_rate) * dw**2
+
+    # Compute RMSProp update
+    next_w = w - learning_rate * dw / (np.sqrt(config['cache']) + epsilon)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
@@ -152,7 +168,29 @@ def adam(w, dw, config=None):
     ###########################################################################
     # *****START OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
 
-    pass
+    # Retrieve hyperparameters from config
+    learning_rate = config['learning_rate']
+    beta1 = config['beta1']
+    beta2 = config['beta2']
+    epsilon = config['epsilon']
+
+    # Update iteration number
+    config['t'] += 1
+
+    # Update biased first moment estimate
+    config['m'] = beta1 * config['m'] + (1 - beta1) * dw
+
+    # Update biased second raw moment estimate
+    config['v'] = beta2 * config['v'] + (1 - beta2) * (dw**2)
+
+    # Compute bias-corrected first moment estimate
+    mt = config['m'] / (1 - beta1**config['t'])
+
+    # Compute bias-corrected second raw moment estimate
+    vt = config['v'] / (1 - beta2**config['t'])
+
+    # Compute Adam update
+    next_w = w - learning_rate * mt / (np.sqrt(vt) + epsilon)
 
     # *****END OF YOUR CODE (DO NOT DELETE/MODIFY THIS LINE)*****
     ###########################################################################
